@@ -9,10 +9,10 @@ Created on Wed Jun 19 18:38:00 2024
 
 """
 #anndata stands for Annotated Data.
-#It is a Python package that allows for represention of gene
+#It is a Python package that allows for representation of gene
 #expression values, sample/gene metadata, and even results from a single-cell 
 #RNA-seq experiment within a single Python object. The main advantage of this 
-#approach is a uniform, coherent representaton of all different types of information. 
+#approach is a uniform, coherent representation of all different types of information. 
 #It is useful for h5ad files.
 
 #When you load an .h5ad file in your working directory, 
@@ -38,7 +38,7 @@ import pandas as pd
 import os
 import sys
 
-#We will now import a subset of the single cell data 
+#We will now import a subset of the single-cell data 
 #from the T-cell use case. The data are stored in a compressed 
 #format that is optimized for the scRNA-seq experiments.
 
@@ -50,7 +50,7 @@ print(loaded_modules)
 
 #%% Cell 3: Set the working directory to the desired path
 
-desired_path = 'C:/Users/Laven/Documents/Data_Analysis/Single-cell_transcriptomics_identifies_an'
+desired_path = '[redacted]'
 os.chdir(desired_path)
 
 #%% Cell 4: importing scRNA-seq data from a .h5ad file
@@ -80,8 +80,8 @@ gene_metadata = scdr.var
 # Accessing a specific column in the cell metadata
 cell_types = scdr.obs['cell.type']
 
-#Not much to see here, at a first glance at least. 
-#The key point is that expression values in single cell experiments are very sparse, 
+#Not much to see here, at first glance, at least. 
+#The key point is that expression values in single-cell experiments are very sparse, 
 #i.e., most of the genes have no expression in most of the cells. 
 #In these cases it is much more efficient to store only the values that are 
 #different from zeros (approx. 5 millions values in our case),
@@ -104,7 +104,7 @@ print(cell_metadata.head())
 
 
 #The `cell_metadata` data frame contains one row for each cell, and each column provides 
-#information on a different aspects of the cells. For example, the 
+#information on a different aspect of the cells. For example, the 
 #\"cell.type\" column allows to distinguish between Naive and Memory T-cells, 
 #while \"cluster.id\" identifies the specific cell type more in detail. Usually, 
 #these types of information are not readily available when scRNA-seq data are 
@@ -113,7 +113,7 @@ print(cell_metadata.head())
 #On a side note, the anndata package using pandas for representing 
 #tabular data makes a lot of sense, given the versatility of pandas data frames. 
 #In general, one advantage of Python and of programming in general is that well-written, 
-#useful modules can then be reused as building-block for future packages.
+#useful modules can then be reused as building blocks for future packages.
 
 #%% Cell 7: #### Using an anndata object
 
@@ -137,7 +137,7 @@ scdr.obs
 #set naive cell metadata
 cell_metadata_naive = scdr.obs
 
-#Here an important point: *subsetting the anndata object with the command 
+#Here is an important point: *subsetting the anndata object with the command 
 #`scdr = scdr[ids, :]` has modified both the gene expression matrix X and 
 #the metadata data frame `obs`*. This is the essence of having a single, 
 #unified object for representing all information produced in a scRNA-seq 
@@ -159,7 +159,7 @@ scdr.var = pd.DataFrame({'num_reads':np.array(num_reads).flatten()}, index=scdr.
 scdr.var
 
 #We now have one more metadata information, this time focusing on 
-#characterizing genes, not cells. This change is of course also reflected 
+#characterizing genes, not cells. This change is of course, also reflected 
 #in the anndata object standard printout, with `var` appearing right below `obs`.
 
 # showing scdr content
@@ -172,7 +172,7 @@ scdr
 
 #We already used the `read_h5ad` function for reading an anndata object 
 #saved in a binary file based on the hdf5 format. 
-#You can also use the `write_h5ad` function for creating a similar 
+#You can also use the `write_h5ad` function to create a similar 
 #file for our current `scdr` object:
     
 # creating a directory for storing the new data",
@@ -185,9 +185,9 @@ scdr.write_h5ad('output_data/scdr_naive_cells.h5ad')
 # check the content of the directory
 os.listdir('output_data')
 
-#The hdf5 format is unparalled in terms of reading / writing speed, 
+#The hdf5 format is unparalleled in terms of reading/writing speed, 
 #especially for very large files. However, if you want to store your 
-#anndata object in comma separate values (csv) files, you can use the `write_csvs` function:
+#anndata object in comma-separate values (CSV) files, you can use the `write_csvs` function:
 
 #%% Cell 8: Writing and listing all the written data
 
@@ -201,8 +201,8 @@ os.listdir('output_data/csvs')
 #within the `scdr` object. *The X matrix is not written, though, 
 #unless you explicitly set the `skip_data` argument to `False`*. 
 #This is because writing the gene expression matrix in a csv format 
-#would usually take very large amount of disk space. In our case `X` 
-#would take ~180 MB in csv format, but larger experiments would easily 
+#would usually take a very large amount of disk space. In our case, `X` 
+#would take ~180 MB in CSV format, but larger experiments would easily 
 #scale up to several GB.
 
 ## Preprocessing scRNA-seq data
@@ -215,7 +215,7 @@ os.listdir('output_data/csvs')
 #or measurements will negatively affect the results, and (b) the data have been 
 #transformed in a way that is appropriate for the analysis to perform.
 #We will perform the preprocessing of the T-cell use-case data using the scanpy package. 
-#Preprocessing is such an important step in the analysis that scanpy has a dedicate module for it, 
+#Preprocessing is such an important step in the analysis that scanpy has a dedicated module for it, 
 #namely `pp`
 #First, let's import the relevant packages and load the data
 
@@ -249,7 +249,7 @@ sc.pp.filter_cells(scdr, min_genes=200)
 #No cells were eliminated this time!
 
 #Similarly, we will remove genes that are expressed only in 3 or fewer cells. 
-#Most likely such genes would not contribute significantly to the analyses, 
+#Most likely, such genes would not contribute significantly to the analyses, 
 #and would only aggravate the computational requirements
 
 #%% Cell 11: Filtering Genes
@@ -258,15 +258,15 @@ sc.pp.filter_cells(scdr, min_genes=200)
 sc.pp.filter_genes(scdr, min_cells=3)
 (scdr.n_obs, scdr.n_vars)
 
-#Circa 6000 genes were filtered out, for having being detected in very few cells.
+#Circa 6000 genes were filtered out for having been detected in very few cells.
 
-#We will now compute the percentage of reads that originates from mitochondrial genes. 
-#An excess of mitochondrial reads usually indicate RNA contamination:
+#We will now compute the percentage of reads that originate from mitochondrial genes. 
+#An excess of mitochondrial reads usually indicates RNA contamination:
 
 # the names of mitochondrial genes starts with 'MT-'. Let's create a boolean 
 #column in the var data frame to identify them"
 scdr.var['mt'] = scdr.var_names.str.startswith('MT-')
-# The following function will compute the percentage of mithocondrial reads for each cell
+# The following function will compute the percentage of mitochondrial reads for each cell
 sc.pp.calculate_qc_metrics(scdr, qc_vars=['mt'], percent_top=None, log1p=False, inplace=True)
 
 #%% Cell 12: Creating violin plots
@@ -277,19 +277,19 @@ sc.pl.violin(scdr, ['n_genes_by_counts', 'total_counts', 'pct_counts_mt'], jitte
 
 #The first plot reports how many genes are expressed for each cell. 
 #The second plot provides the distribution of the total number of reads across cells, 
-#while the third plot illustrate the percentage of mitochondrial reads.
-#Notice that all distribution are skewed torwards higher values. 
+#while the third plot illustrates the percentage of mitochondrial reads.
+#Notice that all distributions are skewed toward higher values. 
 #In the case of the first two plots, these might be doublets, meaning 
 #two or more cells mistakenly sequenced as a single cell. In the case of mitochondrial reads percentage, 
 #dots above 5% might correspond to droplets contaminated with external RNA.
-#We may want to filter out these anomalous samples. Once again we will define some thresholds, heuristically.
+#We may want to filter out these anomalous samples. Once again, we will define some thresholds, heuristically.
 
 #%% Cell 13: Filtering out doublets:
 # filtering out possible doublets
 scdr = scdr[scdr.obs.n_genes < 2000, :].copy()
 
 
-#%% Cell 14: Fitlering out cells affected by contaimination
+#%% Cell 14: Filtering out cells affected by contamination
 # filtering out cells possibly affected by contamination
 
 scdr = scdr[scdr.obs.pct_counts_mt < 5, :].copy()
@@ -308,7 +308,7 @@ sc.pl.violin(scdr, ['n_genes_by_counts', 'total_counts', 'pct_counts_mt'], jitte
 #whole task is broken down in a number of steps: normalization, 
 #variance-stabilization transformation, regressing out confounders,
 # scaling. Depending on the specific study at hand, this standard 
-#pipeline can be altered in different ways. Let's see how these main steps operates on our data.
+#pipeline can be altered in different ways. Let's see how these main steps operate on our data.
 
 #The first step is correcting for the different sequencing depth 
 #characterizing each cell. To assess the extent of this issue, 
@@ -325,7 +325,7 @@ library_size = pd.DataFrame({'library size':np.array(library_size).flatten()}, i
 # plotting the library size distribution
 tmp = library_size.hist(bins=20)
 
-#Most cells have around four thousand reads. But there are cells with over 800. The histogram is slightly skewed right.The disparity
+#Most cells have around four thousand reads. But there are cells with over 800. The histogram is slightly skewed right. The disparity
 #does not allow for direct comparison of the same gene across different samples: a gene which has the same relative level of expression
 #between two cells would appear more expressed in the cell with more reads
 #Use the Normalize function to bring down these disparities
@@ -334,20 +334,20 @@ tmp = library_size.hist(bins=20)
 
 scdr_orig = scdr.copy()
 
-#%% Cell 17: Using the Normalize Total Function to make each cell have approixmately 10,000 reads
+#%% Cell 17: Using the Normalize Total Function to make each cell have approximately 10,000 reads
 
-# normalization. After normalization each cell will have approximately 1e4 normalized reads",
+# normalization. After normalization, each cell will have approximately 1e4 normalized reads",
 sc.pp.normalize_total(scdr, target_sum=1e4)
 
 # new library size
 
 library_size = scdr.X.sum(axis = 1)
 (library_size.min(), library_size.max())
-#We can see that all the cell have a normalized library size equal to 10000, 
+#We can see that all the cells have a normalized library size equal to 10000, 
 #up to rounding error.
 
-#Let's now have a look to what the distribution of the new values look like. 
-#We remove the zero values, which would other wise dominate the plot.
+#Let's now have a look at what the distribution of the new values looks like. 
+#We remove the zero values, which would otherwise dominate the plot.
 
 
 
@@ -358,10 +358,10 @@ tmp = tmp[tmp > 0]
 tmp = pd.DataFrame({'values': tmp}).hist(bins=100)
 
 ##Most of the values are very low, quite close to zero, while a small fraction of the values can be quite high. 
-##Such a skewed distribution can create issues during the analysis, especially for methods assuming close-to-normalty distributions.
+##Such a skewed distribution can create issues during the analysis, especially for methods assuming close-to-normality distributions.
 
-##One possible solution is to log-transform the values, so that to reduce the higher values to a more manageable range. 
-##A small offset is added to the values before log-transforming so that to avoid taking the logarith of zero.
+##One possible solution is to log-transform the values so as to reduce the higher values to a more manageable range. 
+##A small offset is added to the values before log-transforming so as to avoid taking the logarith of zero.
 
 #%% Cell 18: Log Transforming the values
 
@@ -377,15 +377,15 @@ tmp = pd.DataFrame({'values': tmp}).hist(bins=1000)
 
 #Before proceeding further, we will now identify the most variable genes, and we will operate from now on only on this subset. 
 #The reason behind this is that these genes are likely to retain most of the signal present in the data, 
-#while at the same time this will speed up the following computations.
+#while at the same time, this will speed up the following computations.
 
 #%% Cell 20: Identifying genes with the highest variation
 
 sc.pp.highly_variable_genes(scdr)
 sc.pl.highly_variable_genes(scdr)
 
-#These two plots convey the same information: when the average expression level is contrasted against expession values' dispersions, 
-#some gene are cleary on the top side, meaning that their dispersion is greater than the average one. These are the genes we want to focus on.
+#These two plots convey the same information: when the average expression level is contrasted against expression values' dispersions, 
+#some genes are clearly on the top side, meaning that their dispersion is greater than the average one. These are the genes we want to focus on.
 
 #%% Cell 21: What is the percentage of highly variable genes
 
@@ -457,8 +457,8 @@ sc.tl.umap(scdr)
 sc.pl.umap(scdr, color = 'leiden')
 
 #The dots in the UMAP represent our single cells. 
-#Dots close to each other indicate that the transcriptomics profile of the 
-#corresponding cells are similar. Dots are colored according to the clusters 
+#Dots close to each other indicate that the transcriptomics profiles of the 
+#corresponding cells are similar. Dots are coloured according to the cluster 
 #found by the Leiden algorithm. Notice how the 7 clusters gracefully separate 
 #our cells, with minimal or no overlapping.
 
@@ -492,13 +492,13 @@ scdr.obs.loc[scdr.obs.leiden == '6', 'cell_identity'] = 'TEMRA Cells'
 #Further crossing known markers and differentially expressed genes allows us to realize the following matching:",
 #"- Clusters 0, 3, and 5 are characterized by high levels of LRRN3 or CCR7, and thus are recognized as Naive T-cells",
 #"- Clusters 2 is characterized by high levels of PASK, a known marker for Central Memory T-cells",
-#"- Cluster 1 is more complex to assign. It shares most of its differentially expressed genes with Cluster 2, and thus it is likely to be formed by Central Memory T-cells \n",
+#"- Cluster 1 is more complex to assign. It shares most of its differentially expressed genes with Cluster 2, and thus it is likely to be formed by Central Memory T-cells ",
 #"- All three TEM markers are highly expressed in Clusters 4.",
 #"- Clusters 6 was already matched to TEMRA
 
 #%% Cell 35: Storing the different cell types in the cell identity column
 
-# storing the identified cell types in the \"cell_identity\" column\n",
+# storing the identified cell types in the \"cell_identity\" column",
 ids = (scdr.obs.leiden == '0') | (scdr.obs.leiden == '3') | (scdr.obs.leiden == '5')
 scdr.obs.loc[ids, 'cell_identity'] = 'Naive T-Cells'
 ids = (scdr.obs.leiden == '1') | (scdr.obs.leiden == '2')
@@ -506,7 +506,7 @@ scdr.obs.loc[ids, 'cell_identity'] = 'Central Memory T-Cells'
 ids = scdr.obs.leiden == '4'
 scdr.obs.loc[ids, 'cell_identity'] = 'Effector Memory T-Cells'
 
-# plotting the UMAP using colors for marking cell identities\n",
+# plotting the UMAP using colors for marking cell identities",
 sc.pl.umap(scdr, color = 'cell_identity')
 
 #%%  Cell 36: Checking what is inside the scdr at the end of the analysis
