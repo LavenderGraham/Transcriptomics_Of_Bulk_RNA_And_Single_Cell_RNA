@@ -3,6 +3,7 @@
 This is a project where I analyzed Bulk RNA and Single-Cell RNA sequencing data from the study “Single-cell transcriptomics identifies an effectorness gradient shaping the response of CD4+ T cells to cytokines” published in Nature Communications in 2020.
 
 This study analyzes gene expression using Bulk RNA and Single-Cell RNA to quantify gene expression of human naïve and memory CD4+ T cells in response to cytokines. In this study, Th0 refers to the cytokine unstimulated condition, and Th2 refers to a cytokine-stimulated condition.
+
 Using R the Bulk RNA sequencing data was processed using the DESeq2 package. The data was visualized using the vsn, ggplot, EnhancedVolcano, and pheatmap packages.
 
 Using Python the Single-Cell RNA sequencing data was processed using the pandas and scanpy packages and visualized using the matplotlib and scanpy packages.
